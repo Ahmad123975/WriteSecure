@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using WriteSecure.AppDbContext;
 using WriteSecure.Managers;
+using WriteSecure.Managers.JwtTokenManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAuthManager,AuthManager>();
+builder.Services.AddScoped<ITokenManager, TokenManger>();
 builder.Services.AddDbContext<Applicationdbcontext>(option=>option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 

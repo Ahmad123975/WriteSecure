@@ -1,7 +1,7 @@
-﻿using System.Security.Cryptography.Xml;
-using WriteSecure.AppDbContext;
+﻿using WriteSecure.AppDbContext;
 using WriteSecure.Common;
 using WriteSecure.DTOs;
+using WriteSecure.Managers.JwtTokenManager;
 using WriteSecure.Mappers;
 
 namespace WriteSecure.Managers
@@ -9,9 +9,11 @@ namespace WriteSecure.Managers
     public class AuthManager : IAuthManager
     {
         private readonly Applicationdbcontext _context;
-        public AuthManager(Applicationdbcontext context)
+        private readonly ITokenManager _tokenmanager;
+        public AuthManager(Applicationdbcontext context, ITokenManager tokenmanager)
         {
             _context = context;
+            _tokenmanager = tokenmanager;
         }
         public async Task<string> CreateUserAsync(UserDto register)
         {
@@ -32,7 +34,7 @@ namespace WriteSecure.Managers
             {
                 if (PasswordEncyptorDecryptor.VerifyPasswordHash(login.Password, data.PasswordHash, data.PasswordSalt))
                 {
-                    return "Login";
+                    return await _tokenmanager.CreateToken(data);
                 }
                 return "Credential Not Avalable";
 
