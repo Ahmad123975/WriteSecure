@@ -1,4 +1,4 @@
-﻿namespace WriteSecure.Models
+﻿namespace WriteSecure.Common
 {
     public enum RoleType
     {

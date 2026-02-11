@@ -1,6 +1,8 @@
-﻿namespace WriteSecure.Models
+﻿using WriteSecure.Common;
+
+namespace WriteSecure.Models
 {
-    public class UserRegistratoin
+    public class User
     {
         public Guid Id { get; set; }
         public string Username { get; set; } = string.Empty;

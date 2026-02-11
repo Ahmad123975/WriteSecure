@@ -9,6 +9,6 @@ namespace WriteSecure.AppDbContext
         {
             
         }
-        public DbSet<UserRegistratoin> UserRegistratoins { get; set; }
+        public DbSet<User> UserRegistratoins { get; set; }
     }
 }
