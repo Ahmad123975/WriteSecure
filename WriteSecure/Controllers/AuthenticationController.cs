@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WriteSecure.Common;
 using WriteSecure.DTOs;
 using WriteSecure.Managers;
 
@@ -22,6 +24,12 @@ namespace WriteSecure.Controllers
         public async Task<IActionResult> Login(LoginDto login)
         {
             return Ok(await _authservice.LoginAsync(login));
+        }
+        [HttpGet("Auth-endpoint")]
+       [Authorize(Roles = nameof(RoleType.User))]
+        public async Task<IActionResult> AuthCheck()
+        {
+            return Ok();
         }
     }
 }
