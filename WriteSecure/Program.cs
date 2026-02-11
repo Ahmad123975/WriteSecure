@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Net;
+using System.Text;
 using WriteSecure.AppDbContext;
 using WriteSecure.Managers;
 using WriteSecure.Managers.JwtTokenManager;
@@ -12,10 +16,58 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IAuthManager,AuthManager>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
 builder.Services.AddScoped<ITokenManager, TokenManger>();
-builder.Services.AddDbContext<Applicationdbcontext>(option=>option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+builder.Services.AddDbContext<Applicationdbcontext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    option => option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["AppSetting:Issuer"],
+        ValidAudience = builder.Configuration["AppSetting:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSetting:Token"]!))
+    }
+    );
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "WriteSecure Api",
+        Version = "v1",
+    });
+
+
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter JWT token like:Bearer {your Token}"
+
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+{
+    {
+        new OpenApiSecurityScheme
+        {
+            Reference = new OpenApiReference
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+            }
+        },
+        new List<string>()
+    }
+});
+
+});
 
 var app = builder.Build();
 
@@ -27,7 +79,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
