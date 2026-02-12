@@ -1,0 +1,35 @@
+﻿@page "/login"
+@using System.ComponentModel.DataAnnotations
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px; border-radius: 15px;">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-primary">WriteSecure</h2>
+            <p class="text-muted">Welcome back! Please login.</p>
+        </div>
+
+        <EditForm Model="@loginUser" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <InputText @bind-Value="loginUser.Username" class="form-control" placeholder="Enter username" />
+                <ValidationMessage For="@(() => loginUser.Username)" class="text-danger small" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <InputText @bind-Value="loginUser.Password" type="password" class="form-control" placeholder="••••••••" />
+                <ValidationMessage For="@(() => loginUser.Password)" class="text-danger small" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 mt-2 shadow-sm" style="border-radius: 8px;">
+                Login
+            </button>
+        </EditForm>
+
+        <div class="text-center mt-4">
+            <p class="small">Don't have an account? <a href="/signup" class="text-decoration-none">Sign Up</a></p>
+        </div>
+    </div>
+</div>

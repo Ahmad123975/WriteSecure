@@ -15,19 +15,19 @@ namespace WriteSecure.Managers
             _context = context;
             _tokenmanager = tokenmanager;
         }
-        public async Task<string> CreateUserAsync(UserDto register)
+        public async Task<string?> CreateUserAsync(UserDto register)
         {
             if (_context.UserRegistratoins.Any(x => x.Username == register.Username))
             {
-                return "Credential is already Available";
+                return null;
             }
             var data = register.MaptoDomain();
             await _context.UserRegistratoins.AddAsync(data);
             await _context.SaveChangesAsync();
-            return "Data Save Successfully";
+            return null;
         }
 
-        public async Task<string> LoginAsync(LoginDto login)
+        public async Task<string?> LoginAsync(LoginDto login)
         {
             var data = _context.UserRegistratoins.Where(x => x.Username == login.Credential || x.Email == login.Credential).FirstOrDefault();
             if (data != null)
@@ -36,10 +36,10 @@ namespace WriteSecure.Managers
                 {
                     return await _tokenmanager.CreateToken(data);
                 }
-                return "Credential Not Avalable";
+                return null;
 
             }
-            return "Credential Not Avalable";
+            return null;
 
         }
     }

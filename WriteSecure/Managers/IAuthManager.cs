@@ -4,8 +4,8 @@ namespace WriteSecure.Managers
 {
     public interface IAuthManager
     {
-        Task<string> CreateUserAsync(UserDto register);
-        Task<string> LoginAsync(LoginDto login);
+        Task<string?> CreateUserAsync(UserDto register);
+        Task<string?> LoginAsync(LoginDto login);
 
     }
 }
