@@ -1,0 +1,41 @@
+﻿@page "/signup"
+@inject HttpClient Http
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-lg p-4" style="width: 100%; max-width: 450px; border-radius: 15px;">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-success">Create Account</h2>
+            <p class="text-muted">Join WriteSecure today</p>
+        </div>
+
+        <EditForm Model="@registerUser" OnValidSubmit="HandleSignup">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <InputText @bind-Value="registerUser.Username" class="form-control" placeholder="John Doe" />
+                <ValidationMessage For="@(() => registerUser.Username)" class="text-danger small" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <InputText @bind-Value="registerUser.Email" class="form-control" placeholder="name@example.com" />
+                <ValidationMessage For="@(() => registerUser.Email)" class="text-danger small" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <InputText @bind-Value="registerUser.Password" type="password" class="form-control" placeholder="Create a strong password" />
+                <ValidationMessage For="@(() => registerUser.Password)" class="text-danger small" />
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 py-2 mt-2 shadow-sm" style="border-radius: 8px;">
+                Register Now
+            </button>
+        </EditForm>
+
+        <div class="text-center mt-4">
+            <p class="small">Already have an account? <a href="/login" class="text-decoration-none">Login</a></p>
+        </div>
+    </div>
+</div>
